@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Product Search</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .search-bar {
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        #input {
+            width: 300px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin-left: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #message {
+            text-align: center;
+            color: #d00;
+            font-size: 18px;
+            margin: 20px;
+        }
+
+        .products {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .box {
+            width: 280px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .box img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .box h3 {
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .price {
+            color: green !important;
+        }
+
+        @media (max-width: 600px) {
+            #input {
+                width: 70%;
+            }
+
+            .box {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Product Search</h1>
+
+    <div class="search-bar">
+        <input
+            type="search"
+            id="input"
+            placeholder="Search product..."
+        >
+
+        <button onclick="search()">Search</button>
+        <button onclick="showAll()">Show All</button>
+    </div>
+
+    <div id="message"></div>
+
+    <div class="products">
+
+        <div class="box">
+            <img
+                src="https://images.pexels.com/photos/243206/pexels-photo-243206.jpeg"
+                alt="Gaddi"
+            >
+            <h3 id="toy1">Toy: </h3>
+            <h3 class="price" id="price1">Price: ₹</h3>
+        </div>
+
+        <div class="box">
+            <img
+                src="https://images.pexels.com/photos/386025/pexels-photo-386025.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                alt="Badi Gaddi"
+            >
+            <h3 id="toy2">Toy: </h3>
+            <h3 class="price" id="price2">Price: ₹</h3>
+        </div>
+
+        <div class="box">
+            <img
+                src="https://images.pexels.com/photos/346804/pexels-photo-346804.jpeg"
+                alt="Hawai Gaddi"
+            >
+            <h3 id="toy3">Toy: </h3>
+            <h3 class="price" id="price3">Price: ₹</h3>
+        </div>
+
+    </div>
+
+    <script>
+
+        // Product data
+		const products = new Map([
+			["Teddy Bear", 150],
+			["Toy Car", 250],
+			["Toy Plane", 350]
+		]);
+
+
+        // Get all product boxes
+        const boxes = document.querySelectorAll(".box");
+
+        // Display product information
+        let count = 1;
+
+        for (let [name, price] of products) {
+
+            document.getElementById("toy" + count).innerText =
+                "Toy: " + name;
+
+            document.getElementById("price" + count).innerText =
+                "Price: ₹" + price;
+
+            count++;
+        }
+
+        // Search function
+        function search() {
+
+            const inputValue = document
+                .getElementById("input")
+                .value
+                .toLowerCase()
+                .trim();
+
+            const message = document.getElementById("message");
+
+            // Empty search
+            if (inputValue === "") {
+                showAll();
+                return;
+            }
+
+            // Hide all products first
+            boxes.forEach(box => {
+                box.style.display = "none";
+            });
+
+            // Check whether product exists
+            if (products.has(inputValue)) {
+
+                let index = 0;
+
+                for (let key of products.keys()) {
+
+                    if (key === inputValue) {
+                        boxes[index].style.display = "block";
+                        break;
+                    }
+
+                    index++;
+                }
+
+                message.innerText = "";
+
+            } else {
+
+                message.innerText = "Product not found!";
+            }
+        }
+
+        // Show all products
+        function showAll() {
+
+            boxes.forEach(box => {
+                box.style.display = "block";
+            });
+
+            document.getElementById("message").innerText = "";
+            document.getElementById("input").value = "";
+        }
+
+        // Search when pressing Enter
+        document.getElementById("input").addEventListener("keydown", function(event) {
+
+            if (event.key === "Enter") {
+                search();
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
